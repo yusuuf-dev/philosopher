@@ -1,5 +1,6 @@
 #include "philo.h"
 
+
 static void philo_routine(t_data *data,int ph)
 {
     int     right_f;
@@ -23,6 +24,22 @@ static void philo_routine(t_data *data,int ph)
     print(data,ph,"is thinking");
 }
 
+
+static void wait_init(t_data *data)
+{
+    while (1)
+    {
+        pthread_mutex_lock(&data->nb_mx);
+        if (data->init_nb >= data->nb)
+        {
+            pthread_mutex_unlock(&data->nb_mx);
+            return;
+        }
+        pthread_mutex_unlock(&data->nb_mx);
+        usleep(100);
+    }   
+}
+
 void    *routine(void *arg)
 {
     t_data          *data;
@@ -34,23 +51,19 @@ void    *routine(void *arg)
     ph = data->init_nb;
     data->init_nb++;
     pthread_mutex_unlock(&data->nb_mx);
-    pthread_mutex_lock(&data->wait_mx);
+
+    wait_init(data);
+
+    ft_usleep((data->tm_eat / 2) * (ph % 2));
+
     while (1)
     {
+        philo_routine(data,ph);
         pthread_mutex_lock(&data->nb_mx);
-        if (data->init_nb >= data->nb)
-        {
-            pthread_mutex_unlock(&data->nb_mx);
-            pthread_mutex_unlock(&data->wait_mx);
+        if (data->is_end)
             break;
-        }
         pthread_mutex_unlock(&data->nb_mx);
     }
-    ft_usleep(1);
-    ft_usleep(1 * (ph % 2));
-    while (!data->is_end)
-    {
-       philo_routine(data,ph);
-    }
+    pthread_mutex_unlock(&data->nb_mx);
     return (NULL);
 }

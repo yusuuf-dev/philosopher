@@ -79,10 +79,5 @@ int    ft_setup(t_data *data ,int ac ,char **av)
         return (ft_clean(data,1));
     if (init_mutex_forks(data) || init_mutex_l_meals(data))
         return(1);
-
-    pthread_mutex_init(&data->wait_mx,NULL);
-    
-    
-    
     return(0);
 }

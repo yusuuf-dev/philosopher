@@ -18,7 +18,6 @@ typedef struct s_data
     pthread_t       manger;
     pthread_mutex_t nb_mx;
     pthread_mutex_t write_mx;
-    pthread_mutex_t wait_mx;
     long            st_time;
     int             tm_die;
     int             tm_eat;

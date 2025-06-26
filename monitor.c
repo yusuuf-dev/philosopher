@@ -1,5 +1,6 @@
 #include "philo.h"
 
+
 static int eat_all_meals(t_data *data)
 {
     int  i;
@@ -29,9 +30,9 @@ void    *monitor(void *arg)
     int         i;
 
     data = (t_data *)arg;
-    while (!data->is_end)
+    while (1)
     {
-        ft_usleep(1);
+        //usleep(1000);
         i = 0;
         while (i < data->nb)
         {
@@ -51,7 +52,13 @@ void    *monitor(void *arg)
             i++;
         }
         if (data->philo_meals != 0 && eat_all_meals(data))
-            return (NULL);
+            break ;
+    }
+    i = 0;
+    while (i < data->nb)
+    {
+        pthread_mutex_unlock(&data->forks[i]);
+        i++;
     }
     return (NULL);
 }
