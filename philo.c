@@ -45,7 +45,7 @@ static int  run_threads(t_data *data)
     i = 0;
     while (i < data->nb)
     {
-       if (pthread_join(data->phs[i++],NULL) != 0)
+       if (pthread_join(data->phs[i],NULL) != 0)
             return (ft_clean(data,3));
         i++;
     }

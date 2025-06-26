@@ -26,11 +26,15 @@ void    print(t_data *data,int ph,char *state)
     long time;
 
     pthread_mutex_lock(&data->write_mx);
+    pthread_mutex_lock(&data->nb_mx);
     if (data->is_end)
     {
+        pthread_mutex_unlock(&data->nb_mx);
         pthread_mutex_unlock(&data->write_mx);
         return;
     }
+    pthread_mutex_unlock(&data->nb_mx);
+    
     time = get_current_time() - data->st_time;
     printf("%ld %d %s\n",time,ph,state);
     pthread_mutex_unlock(&data->write_mx);

@@ -1,5 +1,18 @@
 #include "philo.h"
 
+static int is_simulation_end(t_data *data, int right_f, int ph)
+{
+    pthread_mutex_lock(&data->nb_mx);
+    if (data->is_end)
+    {
+        pthread_mutex_unlock(&data->nb_mx);
+        pthread_mutex_unlock(&data->forks[right_f]);    
+        pthread_mutex_unlock(&data->forks[ph]);
+        return (1);
+    }
+    pthread_mutex_unlock(&data->nb_mx);
+    return (0);
+}
 
 static void philo_routine(t_data *data,int ph)
 {
@@ -16,6 +29,8 @@ static void philo_routine(t_data *data,int ph)
     if (data->philo_meals != 0)
         data->total_meals[ph]++;
     pthread_mutex_unlock(&data->last_meals_mx[ph]);
+    if (is_simulation_end(data,right_f,ph))
+        return;
     ft_usleep(data->tm_eat);
     print(data,ph,"is sleeping");
     pthread_mutex_unlock(&data->forks[right_f]);    
