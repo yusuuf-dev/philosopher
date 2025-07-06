@@ -6,7 +6,7 @@
 /*   By: yoel-you <yoel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 09:25:33 by yoel-you          #+#    #+#             */
-/*   Updated: 2025/07/06 09:50:16 by yoel-you         ###   ########.fr       */
+/*   Updated: 2025/07/06 10:45:45 by yoel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,6 @@ static void	*stop_simulation(t_data *data, int ph)
 	pthread_mutex_lock(&data->write_mx);
 	printf("%ld %d died\n", curr_time, ph);
 	pthread_mutex_unlock(&data->write_mx);
-	if (data->nb == 1)
-	{
-		pthread_mutex_unlock(&data->forks[ph]);
-	}
 	return (NULL);
 }
 

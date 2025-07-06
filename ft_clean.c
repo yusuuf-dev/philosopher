@@ -6,7 +6,7 @@
 /*   By: yoel-you <yoel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 09:25:56 by yoel-you          #+#    #+#             */
-/*   Updated: 2025/07/06 10:19:17 by yoel-you         ###   ########.fr       */
+/*   Updated: 2025/07/06 10:53:56 by yoel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,15 @@ int	ft_clean(t_data *data, int status)
 	i = 0;
 	while (i < data->nb)
 	{
-		if (pthread_mutex_destroy(&data->forks[i]) != 0)
-			ft_putstr_fd("failed destroy fork\n", 1);
+		pthread_mutex_destroy(&data->forks[i]);
 		i++;
 	}
 	i = 0;
 	while (i < data->nb)
 	{
-		if (pthread_mutex_destroy(&data->last_meals_mx[i]) != 0)
-			ft_putstr_fd("failed destroy last meal\n", 1);
+		pthread_mutex_destroy(&data->last_meals_mx[i]);
 		i++;
 	}
-	if (pthread_mutex_destroy(&data->nb_mx) != 0)
-		ft_putstr_fd("failed destroy nb_mx\n", 1);
+	pthread_mutex_destroy(&data->nb_mx);
 	return (ft_free(data, status));
 }
