@@ -1,5 +1,5 @@
 CC = cc
-FLAG = -Wall -Wextra  -Werror
+FLAG = -Wall -Wextra -Werror -pthread
 SRC = custom_atoi.c ft_clean.c ft_malloc.c ft_putstr_fd.c ft_setup.c monitor.c philo.c routine.c utils.c
 OBJ = $(SRC:.c=.o)
 NAME = philo

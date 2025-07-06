@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   monitor.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yoel-you <yoel-you@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/06 09:25:33 by yoel-you          #+#    #+#             */
+/*   Updated: 2025/07/06 09:50:16 by yoel-you         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static int	eat_all_meals(t_data *data)
@@ -22,7 +34,7 @@ static int	eat_all_meals(t_data *data)
 	return (1);
 }
 
-void	*stop_simulation(t_data *data, int ph)
+static void	*stop_simulation(t_data *data, int ph)
 {
 	long	curr_time;
 
@@ -31,16 +43,29 @@ void	*stop_simulation(t_data *data, int ph)
 	data->is_end = 1;
 	pthread_mutex_unlock(&data->nb_mx);
 	curr_time = get_current_time() - data->st_time;
-
 	pthread_mutex_lock(&data->write_mx);
 	printf("%ld %d died\n", curr_time, ph);
 	pthread_mutex_unlock(&data->write_mx);
-
 	if (data->nb == 1)
 	{
 		pthread_mutex_unlock(&data->forks[ph]);
 	}
 	return (NULL);
+}
+
+static void	wait_init_threads(t_data *data)
+{
+	while (1)
+	{
+		pthread_mutex_lock(&data->nb_mx);
+		if (data->init_nb >= data->nb)
+		{
+			pthread_mutex_unlock(&data->nb_mx);
+			break ;
+		}
+		pthread_mutex_unlock(&data->nb_mx);
+		usleep(50);
+	}
 }
 
 void	*monitor(void *arg)
@@ -50,19 +75,7 @@ void	*monitor(void *arg)
 	int		i;
 
 	data = (t_data *)arg;
-	
-	while (1)
-	{
-		pthread_mutex_lock(&data->nb_mx);
-		if (data->init_nb >= data->nb)
-		{
-			pthread_mutex_unlock(&data->nb_mx);
-			break;
-		}
-		pthread_mutex_unlock(&data->nb_mx);
-		usleep(50);
-	}
-	
+	wait_init_threads(data);
 	while (1)
 	{
 		ft_usleep(1);

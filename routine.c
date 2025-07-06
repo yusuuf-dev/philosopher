@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   routine.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yoel-you <yoel-you@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/06 09:25:18 by yoel-you          #+#    #+#             */
+/*   Updated: 2025/07/06 10:37:56 by yoel-you         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static int	is_simulation_end(t_data *data, int right_f, int ph)
@@ -33,7 +45,7 @@ static void	last_philo_routine(t_data *data, int ph)
 		return ;
 	ft_usleep(data->tm_eat);
 	print(data, ph, "is sleeping");
-	pthread_mutex_unlock(&data->forks[ph]);		
+	pthread_mutex_unlock(&data->forks[ph]);
 	pthread_mutex_unlock(&data->forks[right_f]);
 	ft_usleep(data->tm_sleep);
 	print(data, ph, "is thinking");
@@ -49,7 +61,7 @@ static void	philo_routine(t_data *data, int ph)
 	pthread_mutex_lock(&data->forks[ph]);
 	print(data, ph, "has taken a fork");
 	pthread_mutex_lock(&data->forks[right_f]);
-	print(data, ph, "has taken a fork"); 
+	print(data, ph, "has taken a fork");
 	pthread_mutex_lock(&data->last_meals_mx[ph]);
 	data->last_meals[ph] = get_current_time() - data->st_time;
 	print(data, ph, "is eating");
@@ -65,7 +77,7 @@ static void	philo_routine(t_data *data, int ph)
 	ft_usleep(data->tm_sleep);
 	print(data, ph, "is thinking");
 	if (data->nb % 2 && data->tm_sleep >= data->tm_eat)
-		ft_usleep(data->tm_sleep);	
+		ft_usleep(data->tm_sleep);
 }
 
 static void	wait_init(t_data *data)
